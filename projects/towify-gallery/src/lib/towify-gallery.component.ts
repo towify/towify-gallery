@@ -3,7 +3,7 @@
  * @Date: 2023/3/9
 */
 
-import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import * as Towify from '@towify-types/dsl';
 import { SizeUnit } from '@towify/common-values';
 import { CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
@@ -13,7 +13,7 @@ import { CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
   templateUrl: './towify-gallery.component.html',
   styleUrls: ['./towify-gallery.component.scss']
 })
-export class TowifyGalleryComponent implements OnInit, OnChanges {
+export class TowifyGalleryComponent implements OnChanges {
 
   @ViewChild('displayContainer', { read: ElementRef, static: true })
   displayContainer!: ElementRef;
@@ -59,9 +59,6 @@ export class TowifyGalleryComponent implements OnInit, OnChanges {
     };
     this.#startX = 0;
     this.#translateXBackup = 0;
-  }
-
-  ngOnInit() {
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -187,13 +184,11 @@ export class TowifyGalleryComponent implements OnInit, OnChanges {
     } else if ((<TouchEvent>data.event).touches.length === 1) {
       moveX = (<TouchEvent>data.event).touches[0].clientX;
     }
-    console.log('drag move', this.#startX, moveX);
     if (this.#startX === -1 || moveX === -1) return;
     if (this.displayIndex === 0 && moveX > this.#startX) return;
     if (this.displayIndex === this.imageList.length - 1 && moveX < this.#startX) return;
     if (Math.abs(moveX- this.#startX) > this.#containerRect.width) return;
     this.displayTranslateX =  moveX- this.#startX;
-    console.log('drag move 2', this.displayTranslateX);
   }
 
   displayDragEnd() {
