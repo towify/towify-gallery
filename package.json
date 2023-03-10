@@ -35,6 +35,8 @@
     "@angular/core": "15.2.1",
     "@angular/platform-browser": "15.2.1",
     "@angular/platform-browser-dynamic": "15.2.1",
+    "@towify/common-values": "0.2.6",
+    "@towify-types/dsl": "1.5.35",
     "rxjs": "7.8.0",
     "tslib": "2.5.0",
     "zone.js": "0.12.0"
