@@ -14,6 +14,11 @@
           "options": {
             "tsConfig": "projects/towify-gallery/tsconfig.lib.json",
             "project": "projects/towify-gallery/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/towify-gallery/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -31,9 +36,7 @@
               "projects/towify-gallery/tsconfig.lib.json",
               "projects/towify-gallery/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -55,18 +58,14 @@
             "outputPath": "dist/staff",
             "index": "projects/staff/src/index.html",
             "main": "projects/staff/src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "projects/staff/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               "projects/staff/src/favicon.ico",
               "projects/staff/src/assets"
             ],
-            "styles": [
-              "projects/staff/src/styles.css"
-            ],
+            "styles": ["projects/staff/src/styles.css"],
             "scripts": []
           },
           "configurations": {
@@ -117,19 +116,14 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "projects/staff/tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               "projects/staff/src/favicon.ico",
               "projects/staff/src/assets"
             ],
-            "styles": [
-              "projects/staff/src/styles.scss"
-            ],
+            "styles": ["projects/staff/src/styles.scss"],
             "scripts": []
           }
         }
