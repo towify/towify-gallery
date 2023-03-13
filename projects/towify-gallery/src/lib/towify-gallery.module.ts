@@ -8,7 +8,7 @@ import { TowifyGalleryComponent } from './towify-gallery.component';
 import { TowifyGalleryStylePipe } from './pipe/towify-gallery-style.pipe';
 import { TowifyGalleryThumbStylePipe } from './pipe/towify-gallery-thumb-style.pipe';
 import { BrowserModule } from '@angular/platform-browser';
-import { CommonModule, IMAGE_LOADER, ImageLoaderConfig } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { TowifyGalleryImageSourcePipe } from './pipe/towify-gallery-image-source.pipe';
 import { TowifyGalleryDisplayItemStylePipe } from './pipe/towify-gallery-display-item-style.pipe';
 import { TowifyGalleryDisplayImageStylePipe } from './pipe/towify-gallery-display-image-style.pipe';
