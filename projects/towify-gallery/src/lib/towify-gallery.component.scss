@@ -3,6 +3,8 @@ $dashboardBackgroundColor: #191919;
 $basic-font: system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', sans-serif;
 
 :host {
+  width: 100%;
+  height: 100%;
   display: block;
 
   .gallery-container {

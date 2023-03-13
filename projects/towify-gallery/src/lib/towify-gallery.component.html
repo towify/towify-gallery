@@ -63,12 +63,9 @@
       "
     >
       <img
-        [src]="
-          image
-            | towifyGalleryImageSource
-              : true
-              : config.style.thumb.size.value * 2
-        "
+        [ngSrc]="image"
+        [width]="config.style.thumb?.size.value ?? 120"
+        [height]="config.style.thumb?.size.value ?? 120"
       />
     </div>
   </div>

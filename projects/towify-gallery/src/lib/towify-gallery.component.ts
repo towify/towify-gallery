@@ -86,8 +86,8 @@ export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    const { galleryType, imageList } = changes;
-    if (galleryType) {
+    const { config, imageList } = changes;
+    if (config) {
       if (!this.data.length) {
         this.data = this.config!.resources;
       }
