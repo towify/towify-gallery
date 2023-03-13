@@ -1,5 +1,5 @@
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { GalleryType, SizeUnit, TowifyGalleryComponent } from '../../../towify-gallery/src';
+import { Component, HostListener, ViewChild } from '@angular/core';
+import { GalleryType, TowifyGalleryComponent } from '../../../towify-gallery/src';
 
 @Component({
   selector: 'app-root',
@@ -16,13 +16,13 @@ export class AppComponent {
         position: 'bottom',
         size: {
           value: 100,
-          unit: SizeUnit.PX
+          unit: 'px'
         }
       },
       autoPlay: false,
       gap: {
         value: 10,
-        unit: SizeUnit.PX
+        unit: 'px'
       },
       ratio: '1:1',
       paginator: {
