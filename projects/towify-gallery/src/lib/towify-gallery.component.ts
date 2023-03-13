@@ -3,7 +3,17 @@
  * @Date: 2023/3/9
 */
 
-import { Component, ElementRef, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  NgZone,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import { CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
 import { GalleryType, SizeUnit } from './towify-gallery.type';
 
