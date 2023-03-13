@@ -1,27 +1,25 @@
 /*
  * @Author: allen
  * @Date: 2023/3/9
-*/
+ */
 
 import {
   Component,
   ElementRef,
   Input,
-  NgZone,
   OnChanges,
   SimpleChanges,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
-import { GalleryType, SizeUnit } from './towify-gallery.type';
+import { GalleryType } from './towify-gallery.type';
 
 @Component({
   selector: 'towify-gallery',
   templateUrl: './towify-gallery.component.html',
-  styleUrls: ['./towify-gallery.component.scss']
+  styleUrls: ['./towify-gallery.component.scss'],
 })
 export class TowifyGalleryComponent implements OnChanges {
-
   @ViewChild('contentContainer', { read: ElementRef, static: true })
   displayContainer!: ElementRef;
 
@@ -29,7 +27,7 @@ export class TowifyGalleryComponent implements OnChanges {
   data: string[] = [];
 
   @Input()
-  config?: GalleryType
+  config?: GalleryType;
 
   #prepareIndex = 0;
   currentIndex = 0;
@@ -48,23 +46,20 @@ export class TowifyGalleryComponent implements OnChanges {
   #translateXBackup;
   viewIndex = 2;
   isCurrentView = false;
-  viewTransition?: string
+  viewTransition?: string;
   viewTranslateX = 0;
   #isDragMove = false;
-
 
   computeDragRenderPos = () => {
     return { x: this.#containerRect.x, y: this.#containerRect.y };
   };
 
-  constructor(
-    private readonly zone: NgZone
-  ) {
+  constructor() {
     this.#containerRect = {
       x: 0,
       y: 0,
       width: 1,
-      height: 1
+      height: 1,
     };
     this.#startX = 0;
     this.#translateXBackup = 0;
@@ -84,7 +79,10 @@ export class TowifyGalleryComponent implements OnChanges {
   }
 
   layout() {
-    this.#updateTranslateX((this.displayContainer.nativeElement as HTMLElement).clientWidth, this.currentIndex);
+    this.#updateTranslateX(
+      (this.displayContainer.nativeElement as HTMLElement).clientWidth,
+      this.currentIndex
+    );
   }
 
   dragStart(data: CdkDragStart) {
@@ -95,9 +93,11 @@ export class TowifyGalleryComponent implements OnChanges {
       x: swiperContainerRect.x,
       y: swiperContainerRect.y,
       width: swiperContainerRect.width,
-      height: swiperContainerRect.height
+      height: swiperContainerRect.height,
     };
-    if (this.config?.type !== 'thumb' && this.config?.type !== 'slider') return;
+    if (this.config?.type !== 'thumb' && this.config?.type !== 'slider') {
+      return;
+    }
     if (data.event.type === 'mousemove') {
       this.#startX = (<MouseEvent>data.event).clientX;
     } else if ((<TouchEvent>data.event).touches.length === 1) {
@@ -110,18 +110,28 @@ export class TowifyGalleryComponent implements OnChanges {
   }
 
   dragMove(data: CdkDragMove) {
-    if (this.config?.type !== 'thumb' && this.config?.type !== 'slider') return;
+    if (this.config?.type !== 'thumb' && this.config?.type !== 'slider') {
+      return;
+    }
     let moveX = -1;
     if (data.event.type === 'mousemove') {
       moveX = (<MouseEvent>data.event).clientX;
     } else if ((<TouchEvent>data.event).touches.length === 1) {
       moveX = (<TouchEvent>data.event).touches[0].clientX;
     }
-    if (this.#startX === -1 || moveX === -1) return;
-    if (this.currentIndex === 0 && moveX > this.#startX) return;
-    if (this.currentIndex === this.data.length - 1 && moveX < this.#startX) return;
-    if (Math.abs(moveX- this.#startX) > this.#containerRect.width) return;
-    this.translateX = this.#translateXBackup + moveX- this.#startX;
+    if (this.#startX === -1 || moveX === -1) {
+      return;
+    }
+    if (this.currentIndex === 0 && moveX > this.#startX) {
+      return;
+    }
+    if (this.currentIndex === this.data.length - 1 && moveX < this.#startX) {
+      return;
+    }
+    if (Math.abs(moveX - this.#startX) > this.#containerRect.width) {
+      return;
+    }
+    this.translateX = this.#translateXBackup + moveX - this.#startX;
   }
 
   dragEnd() {
@@ -131,7 +141,11 @@ export class TowifyGalleryComponent implements OnChanges {
       return;
     }
     if (Math.abs(this.translateX - this.#translateXBackup) > 5) {
-      this.moveScrollViewByIndex(this.translateX - this.#translateXBackup < 0 ? this.currentIndex + 1 : this.currentIndex - 1);
+      this.moveScrollViewByIndex(
+        this.translateX - this.#translateXBackup < 0
+          ? this.currentIndex + 1
+          : this.currentIndex - 1
+      );
     } else {
       this.translateX = this.#translateXBackup;
     }
@@ -140,8 +154,13 @@ export class TowifyGalleryComponent implements OnChanges {
   }
 
   moveScrollViewByIndex(index: number) {
-    if (index < 0 || index > this.data.length - 1) return;
-    this.#updateTranslateX((this.displayContainer.nativeElement as HTMLElement).clientWidth, index)
+    if (index < 0 || index > this.data.length - 1) {
+      return;
+    }
+    this.#updateTranslateX(
+      (this.displayContainer.nativeElement as HTMLElement).clientWidth,
+      index
+    );
     this.animationTransition = 'all 0.5s';
     this.#prepareIndex = index;
   }
@@ -179,7 +198,7 @@ export class TowifyGalleryComponent implements OnChanges {
       x: 0,
       y: 0,
       width: document.documentElement.clientWidth,
-      height: document.documentElement.clientHeight
+      height: document.documentElement.clientHeight,
     };
     if (data.event.type === 'mousemove') {
       this.#startX = (<MouseEvent>data.event).clientX;
@@ -199,11 +218,19 @@ export class TowifyGalleryComponent implements OnChanges {
     } else if ((<TouchEvent>data.event).touches.length === 1) {
       moveX = (<TouchEvent>data.event).touches[0].clientX;
     }
-    if (this.#startX === -1 || moveX === -1) return;
-    if (this.viewIndex === 0 && moveX > this.#startX) return;
-    if (this.viewIndex === this.data.length - 1 && moveX < this.#startX) return;
-    if (Math.abs(moveX- this.#startX) > this.#containerRect.width) return;
-    this.viewTranslateX =  moveX- this.#startX;
+    if (this.#startX === -1 || moveX === -1) {
+      return;
+    }
+    if (this.viewIndex === 0 && moveX > this.#startX) {
+      return;
+    }
+    if (this.viewIndex === this.data.length - 1 && moveX < this.#startX) {
+      return;
+    }
+    if (Math.abs(moveX - this.#startX) > this.#containerRect.width) {
+      return;
+    }
+    this.viewTranslateX = moveX - this.#startX;
   }
 
   onLightBoxDragEnd() {
@@ -227,10 +254,9 @@ export class TowifyGalleryComponent implements OnChanges {
 
   #updateTranslateX(containerWidth: number, index: number) {
     const gap =
-      (this.config?.style.gap.unit === SizeUnit.Unset
+      (this.config?.style.gap.unit === 'unset'
         ? 0
         : this.config?.style.gap.value) ?? 0;
     this.translateX = 0 - (containerWidth + gap) * index;
   }
-
 }

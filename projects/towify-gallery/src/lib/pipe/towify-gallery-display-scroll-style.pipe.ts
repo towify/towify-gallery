@@ -4,7 +4,7 @@
 */
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { GalleryType, SizeUnit } from '../towify-gallery.type';
+import { GalleryType  } from '../towify-gallery.type';
 import { TowifyGalleryUtil } from '../towify-gallery.util';
 
 @Pipe({
@@ -33,9 +33,9 @@ export class TowifyGalleryDisplayScrollStylePipe implements PipeTransform {
         }
       case 'grid':
         const gapNumber =
-          galleryInfo.style.gap.unit === SizeUnit.Fit ||
-          galleryInfo.style.gap.unit === SizeUnit.Unset ||
-          galleryInfo.style.gap.unit === SizeUnit.Auto
+          galleryInfo.style.gap.unit === 'fit-content' ||
+          galleryInfo.style.gap.unit === 'unset' ||
+          galleryInfo.style.gap.unit === 'auto'
             ? 0
             : galleryInfo.style.gap.value;
         return {
