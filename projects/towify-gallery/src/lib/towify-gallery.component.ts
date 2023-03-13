@@ -49,12 +49,10 @@ export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
   #startX;
   #translateXBackup;
   #resizeObserver: ResizeObserver;
-
-
-  displayIndex = 2;
-  isDisplayView = false;
-  displayTransition?: string
-  displayTranslateX = 0;
+  viewIndex = 2;
+  isCurrentView = false;
+  viewTransition?: string
+  viewTranslateX = 0;
 
 
   computeDragRenderPos = () => {
@@ -166,22 +164,22 @@ export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
 
   onContentViewByIndex(index: number) {
     if (this.animationTransition) return;
-    this.displayIndex = index;
-    this.isDisplayView = true;
+    this.viewIndex = index;
+    this.isCurrentView = true;
   }
 
   closeContentContainerView() {
-    if (this.displayTransition) return;
-    this.isDisplayView = false;
+    if (this.viewTransition) return;
+    this.isCurrentView = false;
   }
 
-  onContentContainerTransitionEnd() {
-    this.displayIndex = this.#prepareIndex;
-    this.displayTransition = undefined;
-    this.displayTranslateX = 0;
+  onLightBoxTransitionEnd() {
+    this.viewIndex = this.#prepareIndex;
+    this.viewTransition = undefined;
+    this.viewTranslateX = 0;
   }
 
-  onContentContainerDragStart(data: CdkDragStart) {
+  onLightBoxDragStart(data: CdkDragStart) {
     this.#containerRect = {
       x: 0,
       y: 0,
@@ -193,12 +191,12 @@ export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
     } else if ((<TouchEvent>data.event).touches.length === 1) {
       this.#startX = (<TouchEvent>data.event).touches[0].clientX;
     }
-    this.displayTransition = undefined;
-    this.displayTranslateX = 0;
+    this.viewTransition = undefined;
+    this.viewTranslateX = 0;
     this.isDragging = true;
   }
 
-  onContentContainerDragMove(data: CdkDragMove) {
+  onLightBoxDragMove(data: CdkDragMove) {
     let moveX = -1;
     if (data.event.type === 'mousemove') {
       moveX = (<MouseEvent>data.event).clientX;
@@ -206,26 +204,26 @@ export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
       moveX = (<TouchEvent>data.event).touches[0].clientX;
     }
     if (this.#startX === -1 || moveX === -1) return;
-    if (this.displayIndex === 0 && moveX > this.#startX) return;
-    if (this.displayIndex === this.data.length - 1 && moveX < this.#startX) return;
+    if (this.viewIndex === 0 && moveX > this.#startX) return;
+    if (this.viewIndex === this.data.length - 1 && moveX < this.#startX) return;
     if (Math.abs(moveX- this.#startX) > this.#containerRect.width) return;
-    this.displayTranslateX =  moveX- this.#startX;
+    this.viewTranslateX =  moveX- this.#startX;
   }
 
-  onContentContainerDragEnd() {
-    if (Math.abs(this.displayTranslateX) > 5) {
-      if (this.displayTranslateX > 0) {
-        this.#prepareIndex = this.displayIndex - 1;
-        this.displayTranslateX = this.#containerRect.width + 20;
+  onLightBoxDragEnd() {
+    if (Math.abs(this.viewTranslateX) > 5) {
+      if (this.viewTranslateX > 0) {
+        this.#prepareIndex = this.viewIndex - 1;
+        this.viewTranslateX = this.#containerRect.width + 20;
       } else {
-        this.#prepareIndex = this.displayIndex + 1;
-        this.displayTranslateX = 0 - this.#containerRect.width - 20;
+        this.#prepareIndex = this.viewIndex + 1;
+        this.viewTranslateX = 0 - this.#containerRect.width - 20;
       }
     } else {
-      this.displayTranslateX = 0;
-      this.#prepareIndex = this.displayIndex;
+      this.viewTranslateX = 0;
+      this.#prepareIndex = this.viewIndex;
     }
-    this.displayTransition = 'all 0.5s';
+    this.viewTransition = 'all 0.5s';
     this.#startX = -1;
     this.isDragging = false;
   }

@@ -74,33 +74,33 @@
   </div>
 </div>
 
-<div class="gallery-light-box-container" *ngIf="isDisplayView">
+<div class="gallery-light-box-container" *ngIf="isCurrentView">
   <div
     class="content-container"
     cdkDrag
     [cdkDragConstrainPosition]="computeDragRenderPos"
-    (cdkDragStarted)="onContentContainerDragStart($event)"
-    (cdkDragEnded)="onContentContainerDragEnd()"
-    (cdkDragMoved)="onContentContainerDragMove($event)"
+    (cdkDragStarted)="onLightBoxDragStart($event)"
+    (cdkDragEnded)="onLightBoxDragEnd()"
+    (cdkDragMoved)="onLightBoxDragMove($event)"
     (click)="closeContentContainerView()"
     (touchend)="$event.touches.length === 1 ? closeContentContainerView() : ''"
   >
     <div class="navigator-container" [style.margin-top.px]="13">
       <span class="title">{{
         this.data.length > 0
-          ? displayIndex + 1 + " / " + this.data.length
+          ? viewIndex + 1 + " / " + this.data.length
           : "0 / 0"
       }}</span>
     </div>
     <div class="image-container" *ngIf="data.length">
-      <ng-container *ngIf="displayIndex > 0">
+      <ng-container *ngIf="viewIndex > 0">
         <div
           class="item previous"
-          [style.transform]="'translate(' + displayTranslateX + 'px, 0)'"
-          [style.transition]="displayTransition"
+          [style.transform]="'translate(' + viewTranslateX + 'px, 0)'"
+          [style.transition]="viewTransition"
         >
           <img
-            [src]="data[displayIndex - 1] | towifyGalleryImageSource"
+            [src]="data[viewIndex - 1] | towifyGalleryImageSource"
             class="display-image"
             alt="image"
           />
@@ -109,25 +109,25 @@
       <ng-container>
         <div
           class="item current"
-          [style.transform]="'translate(' + displayTranslateX + 'px, 0)'"
-          [style.transition]="displayTransition"
-          (transitionend)="onContentContainerTransitionEnd()"
+          [style.transform]="'translate(' + viewTranslateX + 'px, 0)'"
+          [style.transition]="viewTransition"
+          (transitionend)="onLightBoxTransitionEnd()"
         >
           <img
-            [src]="data[displayIndex] | towifyGalleryImageSource"
+            [src]="data[viewIndex] | towifyGalleryImageSource"
             class="display-image"
             alt="image"
           />
         </div>
       </ng-container>
-      <ng-container *ngIf="displayIndex < data.length - 1">
+      <ng-container *ngIf="viewIndex < data.length - 1">
         <div
           class="item next"
-          [style.transform]="'translate(' + displayTranslateX + 'px, 0)'"
-          [style.transition]="displayTransition"
+          [style.transform]="'translate(' + viewTranslateX + 'px, 0)'"
+          [style.transition]="viewTransition"
         >
           <img
-            [src]="data[displayIndex + 1] | towifyGalleryImageSource"
+            [src]="data[viewIndex + 1] | towifyGalleryImageSource"
             class="display-image"
             alt="image"
           />
