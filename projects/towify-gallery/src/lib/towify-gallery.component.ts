@@ -50,6 +50,7 @@ export class TowifyGalleryComponent implements OnChanges {
   isCurrentView = false;
   viewTransition?: string
   viewTranslateX = 0;
+  #isDragMove = false;
 
 
   computeDragRenderPos = () => {
@@ -105,6 +106,7 @@ export class TowifyGalleryComponent implements OnChanges {
     this.#translateXBackup = this.translateX;
     this.animationTransition = undefined;
     this.isDragging = true;
+    this.#isDragMove = true;
   }
 
   dragMove(data: CdkDragMove) {
@@ -150,13 +152,19 @@ export class TowifyGalleryComponent implements OnChanges {
   }
 
   onContentViewByIndex(index: number) {
-    if (this.animationTransition) return;
+    if (this.#isDragMove) {
+      this.#isDragMove = false;
+      return
+    }
     this.viewIndex = index;
     this.isCurrentView = true;
   }
 
   closeContentContainerView() {
-    if (this.viewTransition) return;
+    if (this.#isDragMove) {
+      this.#isDragMove = false;
+      return
+    }
     this.isCurrentView = false;
   }
 
@@ -181,6 +189,7 @@ export class TowifyGalleryComponent implements OnChanges {
     this.viewTransition = undefined;
     this.viewTranslateX = 0;
     this.isDragging = true;
+    this.#isDragMove = true;
   }
 
   onLightBoxDragMove(data: CdkDragMove) {
@@ -206,11 +215,12 @@ export class TowifyGalleryComponent implements OnChanges {
         this.#prepareIndex = this.viewIndex + 1;
         this.viewTranslateX = 0 - this.#containerRect.width - 20;
       }
+      this.viewTransition = 'all 0.5s';
     } else {
       this.viewTranslateX = 0;
       this.#prepareIndex = this.viewIndex;
+      this.viewTransition = undefined;
     }
-    this.viewTransition = 'all 0.5s';
     this.#startX = -1;
     this.isDragging = false;
   }
