@@ -4,9 +4,8 @@
 */
 
 import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import * as Towify from '@towify-types/dsl';
-import { SizeUnit } from '@towify/common-values';
 import { CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
+import { GalleryType, SizeUnit } from './towify-gallery.type';
 
 @Component({
   selector: 'towify-gallery',
@@ -22,7 +21,7 @@ export class TowifyGalleryComponent implements OnChanges {
   imageList: string[] = [];
 
   @Input()
-  galleryType?: Towify.Component.Property.GalleryType
+  galleryType?: GalleryType
 
   #prepareIndex = 0;
   currentIndex = 0;
