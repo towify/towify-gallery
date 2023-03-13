@@ -32,13 +32,13 @@
     <div
       class="gallery-paginator-container"
       *ngIf="config?.type === 'slider' || config?.type === 'thumb'"
-      [style.display]="config.style.paginator?.display ? 'grid' : 'none'"
+      [style.display]="config?.style.paginator?.display ? 'grid' : 'none'"
     >
       <div
         *ngFor="let image of data; let dotIndex = index"
         class="dot"
         [ngClass]="
-          config?.style.paginator.theme === 'light'
+          config?.style.paginator?.theme === 'light'
             ? dotIndex === currentIndex
               ? 'light-dot-selected'
               : 'light-dot'
@@ -63,12 +63,9 @@
       "
     >
       <img
-        [src]="
-          image
-            | towifyGalleryImageSource
-              : true
-              : config.style.thumb.size.value * 2
-        "
+        [ngSrc]="image"
+        [width]="config.style.thumb?.size.value ?? 120"
+        [height]="config.style.thumb?.size.value ?? 120"
       />
     </div>
   </div>

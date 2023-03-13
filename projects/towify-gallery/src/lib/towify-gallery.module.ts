@@ -14,7 +14,7 @@ import { TowifyGalleryDisplayItemStylePipe } from './pipe/towify-gallery-display
 import { TowifyGalleryDisplayImageStylePipe } from './pipe/towify-gallery-display-image-style.pipe';
 import { TowifyGalleryDisplayScrollStylePipe } from './pipe/towify-gallery-display-scroll-style.pipe';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-
+import { NgOptimizedImage } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -29,7 +29,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
   imports: [
     BrowserModule,
     CommonModule,
-    DragDropModule
+    DragDropModule,
+    NgOptimizedImage,
   ],
   exports: [TowifyGalleryComponent]
 })
