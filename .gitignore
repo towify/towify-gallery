@@ -16,7 +16,7 @@
 
 /src/.idea
 
-/yarn.lock
+/package-lock.json
 
 tslint.json
 
