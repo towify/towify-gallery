@@ -1,0 +1,110 @@
+<div
+  class="gallery-container"
+  [ngStyle]="galleryType | towifyGalleryStyle"
+>
+  <div
+    class="display-container"
+    cdkDrag
+    [cdkDragConstrainPosition]="computeDragRenderPos"
+    (cdkDragStarted)="dragStart($event)"
+    (cdkDragEnded)="dragEnd()"
+    (cdkDragMoved)="dragMove($event)"
+    #displayContainer
+  >
+    <div class="display-scroll-container"
+         [style.transition]="animationTransition"
+         [style.transform]="'translate('+translateX+'px, 0px)'"
+         (transitionend)="transitionend()"
+         [ngStyle]="imageList | towifyGalleryDisplayScrollStyle: galleryType"
+    >
+      <div *ngFor="let image of imageList; let viewIndex = index"
+           [ngStyle]="galleryType | towifyGalleryDisplayItemStyle"
+           (click)="displayViewByIndex(viewIndex)"
+           (touchend)="$event.touches.length === 1 ? displayViewByIndex(viewIndex) : ''"
+      >
+        <img [src]="image | towifyGalleryImageSource"
+             [ngStyle]="galleryType | towifyGalleryDisplayImageStyle"
+        >
+      </div>
+    </div>
+    <div class="display-paginator-container"
+         *ngIf="galleryType?.type === 'slider' || galleryType?.type === 'thumb'"
+         [style.display]="galleryType.style.paginator?.display ? 'grid' : 'none'"
+    >
+      <div
+        *ngFor="let image of imageList; let dotIndex = index"
+        class="dot"
+        [ngClass]="
+          galleryType?.style.paginator.theme === 'light' ?
+            (dotIndex === currentIndex ? 'light-dot-selected' : 'light-dot') :
+            (dotIndex === currentIndex ? 'dark-dot-selected' : 'dark-dot')
+        "
+      ></div>
+    </div>
+  </div>
+  <div
+    *ngIf="galleryType?.type === 'thumb'"
+    class="thumb-container"
+    [ngStyle]="imageList | towifyGalleryThumbStyle: galleryType"
+  >
+    <div *ngFor="let image of imageList; let thumbIndex = index"
+         class="thumb-item"
+         (click)="moveScrollViewByIndex(thumbIndex)"
+         (touchend)="$event.touches.length === 1 ? displayViewByIndex(thumbIndex) : ''"
+    >
+      <img [src]="image | towifyGalleryImageSource: true: galleryType.style.thumb.size.value * 2">
+    </div>
+  </div>
+</div>
+
+
+<div class="gallery-display-view-container" *ngIf="isDisplayView">
+  <div class="gallery-dashboard"
+       cdkDrag
+       [cdkDragConstrainPosition]="computeDragRenderPos"
+       (cdkDragStarted)="displayDragStart($event)"
+       (cdkDragEnded)="displayDragEnd()"
+       (cdkDragMoved)="displayDragMove($event)"
+       (click)="closeDisplayView()"
+       (touchend)="$event.touches.length === 1 ? closeDisplayView() : ''"
+  >
+    <div class="navigator-container" [style.margin-top.px]="13">
+      <span class="title">{{
+        this.imageList.length > 0
+          ? displayIndex + 1 + ' / ' + this.imageList.length
+          : '0 / 0'
+        }}</span>
+    </div>
+    <div class="gallery-display-container" *ngIf="imageList.length">
+      <ng-container *ngIf="displayIndex > 0">
+        <div
+          class="gallery-display-item previous-item"
+          [style.transform]="'translate(' + displayTranslateX + 'px, 0)'"
+          [style.transition]="displayTransition"
+        >
+          <img [src]="imageList[displayIndex - 1] | towifyGalleryImageSource" class="display-image" alt="image" />
+        </div>
+      </ng-container>
+      <ng-container>
+        <div
+          class="gallery-display-item current-item"
+          [style.transform]="'translate(' + displayTranslateX + 'px, 0)'"
+          [style.transition]="displayTransition"
+          (transitionend)="displayTransitionEnd()"
+        >
+          <img [src]="imageList[displayIndex] | towifyGalleryImageSource" class="display-image" alt="image" />
+        </div>
+      </ng-container>
+      <ng-container *ngIf="displayIndex < imageList.length - 1">
+        <div
+          class="gallery-display-item next-item"
+          [style.transform]="'translate(' + displayTranslateX + 'px, 0)'"
+          [style.transition]="displayTransition"
+        >
+          <img [src]="imageList[displayIndex + 1] | towifyGalleryImageSource" class="display-image" alt="image" />
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
