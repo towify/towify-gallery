@@ -9,8 +9,6 @@ import {
   Input,
   NgZone,
   OnChanges,
-  OnDestroy,
-  OnInit,
   SimpleChanges,
   ViewChild
 } from '@angular/core';
@@ -22,7 +20,7 @@ import { GalleryType, SizeUnit } from './towify-gallery.type';
   templateUrl: './towify-gallery.component.html',
   styleUrls: ['./towify-gallery.component.scss']
 })
-export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
+export class TowifyGalleryComponent implements OnChanges {
 
   @ViewChild('contentContainer', { read: ElementRef, static: true })
   displayContainer!: ElementRef;
@@ -48,7 +46,6 @@ export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
 
   #startX;
   #translateXBackup;
-  #resizeObserver: ResizeObserver;
   viewIndex = 2;
   isCurrentView = false;
   viewTransition?: string
@@ -70,19 +67,6 @@ export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
     };
     this.#startX = 0;
     this.#translateXBackup = 0;
-    this.#resizeObserver = new ResizeObserver(entries => {
-      this.zone.run(() => {
-        this.#updateTranslateX(entries[0].contentRect.width, this.currentIndex)
-      })
-    })
-  }
-
-  ngOnInit() {
-    this.#resizeObserver.observe(this.displayContainer.nativeElement);
-  }
-
-  ngOnDestroy() {
-    this.#resizeObserver.disconnect();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -96,6 +80,10 @@ export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
     if (imageList) {
       this.currentIndex = 0;
     }
+  }
+
+  layout() {
+    this.#updateTranslateX((this.displayContainer.nativeElement as HTMLElement).clientWidth, this.currentIndex);
   }
 
   dragStart(data: CdkDragStart) {
@@ -151,8 +139,7 @@ export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
 
   moveScrollViewByIndex(index: number) {
     if (index < 0 || index > this.data.length - 1) return;
-    const containerWidth = this.displayContainer.nativeElement.getBoundingClientRect().width;
-    this.#updateTranslateX(containerWidth, index)
+    this.#updateTranslateX((this.displayContainer.nativeElement as HTMLElement).clientWidth, index)
     this.animationTransition = 'all 0.5s';
     this.#prepareIndex = index;
   }

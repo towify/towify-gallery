@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { GalleryType, SizeUnit } from '../../../towify-gallery/src';
+import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { GalleryType, SizeUnit, TowifyGalleryComponent } from '../../../towify-gallery/src';
 
 @Component({
   selector: 'app-root',
@@ -52,4 +52,12 @@ export class AppComponent {
     'https://img1.baidu.com/it/u=3573056321,2239143646&fm=253&fmt=auto&app=138&f=JPEG?w=889&h=500',
     'https://img2.baidu.com/it/u=1361506290,4036378790&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'
   ]
+
+  @ViewChild('galleryComponent', { read: TowifyGalleryComponent, static: true })
+  galleryComponent!: TowifyGalleryComponent;
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.galleryComponent.layout();
+  }
 }
