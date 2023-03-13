@@ -14,14 +14,14 @@ import { GalleryType, SizeUnit } from './towify-gallery.type';
 })
 export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
 
-  @ViewChild('displayContainer', { read: ElementRef, static: true })
+  @ViewChild('contentContainer', { read: ElementRef, static: true })
   displayContainer!: ElementRef;
 
   @Input()
-  imageList: string[] = [];
+  data: string[] = [];
 
   @Input()
-  galleryType?: GalleryType
+  config?: GalleryType
 
   #prepareIndex = 0;
   currentIndex = 0;
@@ -35,6 +35,7 @@ export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
     width: number;
     height: number;
   };
+
   #startX;
   #translateXBackup;
   #resizeObserver: ResizeObserver;
@@ -79,8 +80,8 @@ export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges) {
     const { galleryType, imageList } = changes;
     if (galleryType) {
-      if (!this.imageList.length) {
-        this.imageList = this.galleryType!.resources;
+      if (!this.data.length) {
+        this.data = this.config!.resources;
       }
       this.currentIndex = 0;
     }
@@ -99,7 +100,7 @@ export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
       width: swiperContainerRect.width,
       height: swiperContainerRect.height
     };
-    if (this.galleryType?.type !== 'thumb' && this.galleryType?.type !== 'slider') return;
+    if (this.config?.type !== 'thumb' && this.config?.type !== 'slider') return;
     if (data.event.type === 'mousemove') {
       this.#startX = (<MouseEvent>data.event).clientX;
     } else if ((<TouchEvent>data.event).touches.length === 1) {
@@ -111,7 +112,7 @@ export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   dragMove(data: CdkDragMove) {
-    if (this.galleryType?.type !== 'thumb' && this.galleryType?.type !== 'slider') return;
+    if (this.config?.type !== 'thumb' && this.config?.type !== 'slider') return;
     let moveX = -1;
     if (data.event.type === 'mousemove') {
       moveX = (<MouseEvent>data.event).clientX;
@@ -120,13 +121,13 @@ export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
     }
     if (this.#startX === -1 || moveX === -1) return;
     if (this.currentIndex === 0 && moveX > this.#startX) return;
-    if (this.currentIndex === this.imageList.length - 1 && moveX < this.#startX) return;
+    if (this.currentIndex === this.data.length - 1 && moveX < this.#startX) return;
     if (Math.abs(moveX- this.#startX) > this.#containerRect.width) return;
     this.translateX = this.#translateXBackup + moveX- this.#startX;
   }
 
   dragEnd() {
-    if (this.galleryType?.type !== 'thumb' && this.galleryType?.type !== 'slider') {
+    if (this.config?.type !== 'thumb' && this.config?.type !== 'slider') {
       this.#startX = -1;
       this.isDragging = false;
       return;
@@ -141,7 +142,7 @@ export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   moveScrollViewByIndex(index: number) {
-    if (index < 0 || index > this.imageList.length - 1) return;
+    if (index < 0 || index > this.data.length - 1) return;
     const containerWidth = this.displayContainer.nativeElement.getBoundingClientRect().width;
     this.#updateTranslateX(containerWidth, index)
     this.animationTransition = 'all 0.5s';
@@ -153,24 +154,24 @@ export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
     this.animationTransition = undefined;
   }
 
-  displayViewByIndex(index: number) {
+  onContentViewByIndex(index: number) {
     if (this.animationTransition) return;
     this.displayIndex = index;
     this.isDisplayView = true;
   }
 
-  closeDisplayView() {
+  closeContentContainerView() {
     if (this.displayTransition) return;
     this.isDisplayView = false;
   }
 
-  displayTransitionEnd() {
+  onContentContainerTransitionEnd() {
     this.displayIndex = this.#prepareIndex;
     this.displayTransition = undefined;
     this.displayTranslateX = 0;
   }
 
-  displayDragStart(data: CdkDragStart) {
+  onContentContainerDragStart(data: CdkDragStart) {
     this.#containerRect = {
       x: 0,
       y: 0,
@@ -187,7 +188,7 @@ export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
     this.isDragging = true;
   }
 
-  displayDragMove(data: CdkDragMove) {
+  onContentContainerDragMove(data: CdkDragMove) {
     let moveX = -1;
     if (data.event.type === 'mousemove') {
       moveX = (<MouseEvent>data.event).clientX;
@@ -196,12 +197,12 @@ export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
     }
     if (this.#startX === -1 || moveX === -1) return;
     if (this.displayIndex === 0 && moveX > this.#startX) return;
-    if (this.displayIndex === this.imageList.length - 1 && moveX < this.#startX) return;
+    if (this.displayIndex === this.data.length - 1 && moveX < this.#startX) return;
     if (Math.abs(moveX- this.#startX) > this.#containerRect.width) return;
     this.displayTranslateX =  moveX- this.#startX;
   }
 
-  displayDragEnd() {
+  onContentContainerDragEnd() {
     if (Math.abs(this.displayTranslateX) > 5) {
       if (this.displayTranslateX > 0) {
         this.#prepareIndex = this.displayIndex - 1;
@@ -221,9 +222,9 @@ export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
 
   #updateTranslateX(containerWidth: number, index: number) {
     const gap =
-      (this.galleryType?.style.gap.unit === SizeUnit.Unset
+      (this.config?.style.gap.unit === SizeUnit.Unset
         ? 0
-        : this.galleryType?.style.gap.value) ?? 0;
+        : this.config?.style.gap.value) ?? 0;
     this.translateX = 0 - (containerWidth + gap) * index;
   }
 

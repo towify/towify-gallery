@@ -3,8 +3,7 @@ $dashboardBackgroundColor: #191919;
 $basic-font: system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', sans-serif;
 
 :host {
-  position: relative;
-  display: inline-block;
+  display: block;
 
   .gallery-container {
     width: 100%;
@@ -15,13 +14,13 @@ $basic-font: system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', 
     grid-template-rows: 100%;
   }
 
-  .display-container {
+  .content-container {
     width: 100%;
     height: 100%;
     display: grid;
     overflow: hidden;
 
-    .display-scroll-container {
+    .content-scroll-container {
       width: 100%;
       height: 100%;
       min-width: 100%;
@@ -32,7 +31,7 @@ $basic-font: system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', 
       grid-area: 1/1/2/2;
     }
 
-    .display-paginator-container {
+    .gallery-paginator-container {
       display: grid;
       position: relative;
       width: fit-content;
@@ -97,7 +96,7 @@ $basic-font: system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', 
   }
 }
 
-.gallery-display-view-container {
+.gallery-light-box-container {
   position: fixed;
   width: 100vw;
   height: 100vh;
@@ -108,7 +107,7 @@ $basic-font: system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', 
   font-family: $basic-font;
 
 
-  .gallery-dashboard {
+  .content-container {
     width: 100%;
     height: 100%;
     background-color: $dashboardBackgroundColor;
@@ -137,7 +136,7 @@ $basic-font: system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', 
       }
     }
 
-    .gallery-display-container {
+    .image-container {
       width: 100%;
       height: 100%;
       display: grid;
@@ -145,7 +144,7 @@ $basic-font: system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', 
       grid-auto-columns: 100%;
       grid-template-rows: 100%;
 
-      .gallery-display-item {
+      .item {
         grid-area: 1/1/2/2;
         width: 100%;
         align-self: center;
@@ -165,17 +164,17 @@ $basic-font: system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', 
         }
       }
 
-      .previous-item {
+      .previous {
         margin-right: calc(100% + 20px);
         justify-self: end;
       }
 
-      .current-item {
+      .current {
         margin-left: 0;
         justify-self: start;
       }
 
-      .next-item {
+      .next {
         margin-left: calc(100% + 20px);
         justify-self: start;
       }
