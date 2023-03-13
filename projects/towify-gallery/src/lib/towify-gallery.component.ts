@@ -3,7 +3,17 @@
  * @Date: 2023/3/9
 */
 
-import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  NgZone,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import { CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
 import { GalleryType, SizeUnit } from './towify-gallery.type';
 
@@ -12,7 +22,7 @@ import { GalleryType, SizeUnit } from './towify-gallery.type';
   templateUrl: './towify-gallery.component.html',
   styleUrls: ['./towify-gallery.component.scss']
 })
-export class TowifyGalleryComponent implements OnChanges {
+export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild('contentContainer', { read: ElementRef, static: true })
   displayContainer!: ElementRef;
@@ -38,6 +48,7 @@ export class TowifyGalleryComponent implements OnChanges {
 
   #startX;
   #translateXBackup;
+  #resizeObserver: ResizeObserver;
 
 
   displayIndex = 2;
@@ -50,7 +61,9 @@ export class TowifyGalleryComponent implements OnChanges {
     return { x: this.#containerRect.x, y: this.#containerRect.y };
   };
 
-  constructor() {
+  constructor(
+    private readonly zone: NgZone
+  ) {
     this.#containerRect = {
       x: 0,
       y: 0,
@@ -59,6 +72,19 @@ export class TowifyGalleryComponent implements OnChanges {
     };
     this.#startX = 0;
     this.#translateXBackup = 0;
+    this.#resizeObserver = new ResizeObserver(entries => {
+      this.zone.run(() => {
+        this.#updateTranslateX(entries[0].contentRect.width, this.currentIndex)
+      })
+    })
+  }
+
+  ngOnInit() {
+    this.#resizeObserver.observe(this.displayContainer.nativeElement);
+  }
+
+  ngOnDestroy() {
+    this.#resizeObserver.disconnect();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -128,11 +154,7 @@ export class TowifyGalleryComponent implements OnChanges {
   moveScrollViewByIndex(index: number) {
     if (index < 0 || index > this.data.length - 1) return;
     const containerWidth = this.displayContainer.nativeElement.getBoundingClientRect().width;
-    const gap =
-      (this.config?.style.gap.unit === SizeUnit.Unset
-        ? 0
-        : this.config?.style.gap.value) ?? 0;
-    this.translateX = 0 - (containerWidth + gap) * index;
+    this.#updateTranslateX(containerWidth, index)
     this.animationTransition = 'all 0.5s';
     this.#prepareIndex = index;
   }
@@ -147,7 +169,6 @@ export class TowifyGalleryComponent implements OnChanges {
     this.displayIndex = index;
     this.isDisplayView = true;
   }
-
 
   closeContentContainerView() {
     if (this.displayTransition) return;
@@ -208,4 +229,13 @@ export class TowifyGalleryComponent implements OnChanges {
     this.#startX = -1;
     this.isDragging = false;
   }
+
+  #updateTranslateX(containerWidth: number, index: number) {
+    const gap =
+      (this.config?.style.gap.unit === SizeUnit.Unset
+        ? 0
+        : this.config?.style.gap.value) ?? 0;
+    this.translateX = 0 - (containerWidth + gap) * index;
+  }
+
 }
