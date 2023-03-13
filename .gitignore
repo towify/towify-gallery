@@ -16,6 +16,8 @@
 
 /src/.idea
 
+/package-lock.json
+
 tslint.json
 
 .angular
