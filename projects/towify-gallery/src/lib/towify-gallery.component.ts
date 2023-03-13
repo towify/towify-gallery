@@ -15,7 +15,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
-import { GalleryType, SizeUnit } from './towify-gallery.type';
+import { GalleryType } from './towify-gallery.type';
 
 @Component({
   selector: 'towify-gallery',
@@ -230,7 +230,7 @@ export class TowifyGalleryComponent implements OnInit, OnChanges, OnDestroy {
 
   #updateTranslateX(containerWidth: number, index: number) {
     const gap =
-      (this.config?.style.gap.unit === SizeUnit.Unset
+      (this.config?.style.gap.unit === 'unset'
         ? 0
         : this.config?.style.gap.value) ?? 0;
     this.translateX = 0 - (containerWidth + gap) * index;
