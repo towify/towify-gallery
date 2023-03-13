@@ -24,21 +24,10 @@ type GalleryType = {
 
 type UISize = {
   value: number;
-  unit: SizeUnit;
+  unit: 'px' | '%' | 'unset' | 'auto' | 'fit-content' | 'vw' | 'vh' | 'cqw';
   locked?: boolean;
   dynamic?: string;
   isSafeArea?: boolean;
 };
 
-enum SizeUnit {
-  PX = "px",
-  Percent = "%",
-  Unset = "unset",
-  Auto = "auto",
-  Fit = "fit-content",
-  VW = "vw",
-  VH = "vh",
-  CQW = "cqw"
-}
-
-export { UISize, SizeUnit, GalleryType };
+export { UISize, GalleryType };
