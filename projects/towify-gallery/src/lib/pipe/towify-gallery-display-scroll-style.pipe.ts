@@ -4,10 +4,8 @@
 */
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { Component } from '@towify-types/dsl';
-import GalleryType = Component.Property.GalleryType;
+import { GalleryType, SizeUnit } from '../towify-gallery.type';
 import { TowifyGalleryUtil } from '../towify-gallery.util';
-import { SizeUnit } from '@towify/common-values';
 
 @Pipe({
   name: 'towifyGalleryDisplayScrollStyle'

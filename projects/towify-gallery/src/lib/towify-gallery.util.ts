@@ -3,8 +3,7 @@
  * @Date: 2023/3/9
 */
 
-
-import { SizeUnit, UISize } from '@towify/common-values';
+import { SizeUnit, UISize } from './towify-gallery.type';
 
 export class TowifyGalleryUtil {
   static getUISizeValueString(size: UISize) {

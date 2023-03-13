@@ -1,6 +1,6 @@
-@import '@towify/common-values/styles/common.styles';
-
+$text-content: #ccc;
 $dashboardBackgroundColor: #191919;
+$basic-font: system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', sans-serif;
 
 :host {
   position: relative;

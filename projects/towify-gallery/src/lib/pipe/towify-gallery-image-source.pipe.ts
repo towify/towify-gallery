@@ -15,20 +15,7 @@ export class TowifyGalleryImageSourcePipe implements PipeTransform {
   }
 
   transform(image: string, isThumb?: boolean, imageSize = 120) {
-    let src = image;
-    if (isThumb) {
-      if (!(src.includes('file://') || src.includes('localhost'))) {
-        if (src.includes('?image')) {
-          src = src.split('?image')[0];
-        }
-        if (src.includes('q-sign')) {
-          src = `${src}&imageMogr2/crop/${imageSize}x${imageSize}`;
-        } else {
-          src = `${src}?imageMogr2/crop/${imageSize}x${imageSize}`;
-        }
-      }
-    }
-    return this.sanitized.bypassSecurityTrustResourceUrl(src);
+    return this.sanitized.bypassSecurityTrustResourceUrl(image);
   }
 
 }
